@@ -117,16 +117,19 @@ const { url } = require("inspector");
 const app = http.createServer((req, res) => {
   const url = new URL(`http://${req.headers.host}${req.url}`);
   const foundParams = url.searchParams;
-  let myobj;
+  let myobj = [];
+
   res.writeHead(200, { "Content-type": "application/json" });
   // foundParams.forEach((element) => {
   //   if (url.searchParams.has(element)) {
   //     myobj.append(element, url.searchParams.get(element));
   //   }
   // });
-  for (let key of foundParams) {
-    res.write(key.toString());
-    // myobj.assign(key, foundParams.get(key));
+  for (let e of foundParams.entries()) {
+    // res.write(key.toString());
+    //let val = foundParams.get(key);
+    let temp = JSON.parse(e);
+    myobj.push(temp);
   }
   //res.write(JSON.stringify(foundParams));
 
