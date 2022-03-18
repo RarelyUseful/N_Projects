@@ -1,30 +1,18 @@
-/*
-aplikacja której zadaniem będzie operacja na tablicy zawierającej użytkowników
-
-- stwórzmy ścieżkę `/add` do dodawania użytkownika, niech przyjmuje ona parametry 
-`name`, `username`, `email` np `?name=Jan&username=janko&email=jan@nowak.abc`, 
-dodanie użytkownika powinno zadziałać tyko wtedy gdy zostało wysłane żądanie typu `POST`, 
-jako rezultat należy zwrócić identyfikator dodanego użytkownika 
-- dodajmy ścieżkę `/show` do wyświetlania wszystkich użytkowników (gdy żądanie będzie typu `GET`)
-- rozbudujmy ścieżkę `/show` tak by wyświetlała jedynie wybranego użytkownika, 
-jeżeli zostanie podany odpowiedni `id` (`/show?id=1`) oraz żądanie będzie typu `GET`, 
-gdy nie ma użytkownika o danym id zwracamy odpowiedni kod statusu
-- rozszerzmy aplikację o kasowanie użytkownika poprzez ścieżkę `/delete?id=1`, 
-gdy nie ma użytkownika o danym id zwracamy odpowiedni kod statusu
-*/
-
 const http = require("http");
 const { url } = require("inspector");
 let usersTab = [];
+let currentID = 0;
+function setID() {
+  //let id = Date.now();
+  //return id;
+  currentID += 1;
+  return currentID;
+}
 const app = http.createServer((req, res) => {
   const url = new URL(`http://${req.headers.host}${req.url}`);
-
   let task = url.pathname;
   let params = url.searchParams;
-  function setID() {
-    let id = Date.now();
-    return id;
-  }
+
   if (req.method == "POST") {
     if (task == "/add") {
       if (params.has("name") && params.has("username") && params.has("email")) {
@@ -36,12 +24,45 @@ const app = http.createServer((req, res) => {
         res.write("Error, Missing one of required parameters");
       }
     }
+  } else if (req.method == "GET") {
+    if (task == "/show") {
+      res.writeHead(200, { "Content-type": "application/json" });
+      if (!params.has("id")) {
+        res.write("All current users: " + " \n");
+        res.write(usersTab + " \n");
+      } else if (params.has("id")) {
+        let id = Number(params.get("id"));
+        let user = usersTab.filter((x) => {
+          return x[0] == id;
+        });
+        if (user.length > 0) {
+          res.write("Found user: " + user + " \n");
+        } else {
+          res.writeHead(404, "User not found");
+          res.write("Couldn't find user with that ID." + " \n");
+        }
+      }
+    }
+  } else if (task == "/delete" && params.has("id")) {
+    let id = Number(params.get("id"));
+    let user = usersTab.filter((x) => {
+      return x[0] == id;
+    });
+    if (user.length > 0) {
+      // user.flat(2); //doesn't work?
+      res.writeHead(200, { "Content-type": "application/json" });
+      let idx = usersTab.indexOf(user[0]);
+      usersTab.splice(idx, 1);
+      res.write("Deleted user." + " \n");
+    } else {
+      res.writeHead(404, "User not found");
+      res.write("Couldn't find user with that ID." + " \n");
+    }
   }
 
   //res.writeHead(200, { "Content-type": "application/json" });
-  res.write("Current usersTab: " + usersTab + " \n");
-  res.write("program ends");
-
+  //res.write("Current usersTab: " + usersTab + " \n");
+  //res.write("program ends");
   res.end();
 });
 
