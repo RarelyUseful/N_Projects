@@ -83,7 +83,7 @@
 
 //07
 // const http = require("http");
-// const { url } = require("inspector");
+// // const { url } = require("inspector");
 // const app = http.createServer((req, res) => {
 //   const url = new URL(`http://${req.headers.host}${req.url}`);
 //   const a = url.searchParams.get("a") || "0";
@@ -91,19 +91,19 @@
 //   const task = url.pathname;
 
 //   if (task == "/mnozenie") {
-//     res.writeHead(200, { "Content-type": "application/xml" });
+//     res.writeHead(200, { "Content-type": "plain/text" });
 //     res.write(`Inputs: ${a}, ${b}, mul result: ${Number(a) * Number(b)}`);
 //   } else if (task == "/dzielenie") {
-//     res.writeHead(200, { "Content-type": "application/xml" });
+//     res.writeHead(200, { "Content-type": "plain/text" });
 //     res.write(`Inputs: ${a}, ${b}, div result: ${Number(a) / Number(b)}`);
 //   } else if (task == "/dodawanie") {
-//     res.writeHead(200, { "Content-type": "application/xml" });
+//     res.writeHead(200, { "Content-type": "plain/text" });
 //     res.write(`Inputs: ${a}, ${b}, sum result: ${Number(a) + Number(b)}`);
 //   } else if (task == "/odejmowanie") {
-//     res.writeHead(200, { "Content-type": "application/xml" });
+//     res.writeHead(200, { "Content-type": "plain/text" });
 //     res.write(`Inputs: ${a}, ${b}, sub result: ${Number(a) - Number(b)}`);
 //   } else {
-//     res.writeHead(513, "Bad request");
+//     res.writeHead(502, "Bad request");
 //     res.write(`Yeah, well... that's just like ... bad request, man.`);
 //   }
 //   res.end();
@@ -111,29 +111,14 @@
 
 // app.listen(4700);
 
-// 08
+// // 08
 const http = require("http");
 const { url } = require("inspector");
 const app = http.createServer((req, res) => {
   const url = new URL(`http://${req.headers.host}${req.url}`);
   const foundParams = url.searchParams;
-  let myobj = [];
-
-  res.writeHead(200, { "Content-type": "application/json" });
-  // foundParams.forEach((element) => {
-  //   if (url.searchParams.has(element)) {
-  //     myobj.append(element, url.searchParams.get(element));
-  //   }
-  // });
-  for (let e of foundParams.entries()) {
-    // res.write(key.toString());
-    //let val = foundParams.get(key);
-    let temp = JSON.parse(e);
-    myobj.push(temp);
-  }
-  //res.write(JSON.stringify(foundParams));
-
-  res.write(JSON.stringify(myobj));
+  // not working !
+  res.write(JSON.parse(foundParams));
   res.end();
 });
 
