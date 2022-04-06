@@ -106,10 +106,5 @@ dist
 # powerpoint
 *.pptx
 
-# homework
-**/praca domowa*/**
-
-# exam
-**/zaliczenie*/**
 
 **/temp*/**
