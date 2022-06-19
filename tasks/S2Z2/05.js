@@ -11,6 +11,7 @@ let users = [
 ];
 
 //dodawanie usera
+// http://localhost:4700/add?name=Jan&username=janko&email=jan@nowak.abc
 app.post("/add", (req, res) => {
   if (!req.query.name || !req.query.username || !req.query.email) {
     res.status(400).send("Missing parameters");
@@ -31,21 +32,25 @@ app.post("/add", (req, res) => {
   res.status = 201;
   res.send("user created");
 });
+
 //wyswietl wszystkich
+// http://localhost:4700/users
 app.get("/users", (req, res) => {
   res.json(users);
+  // zwracając wartość za pomocą res.json() express sam przetworzy obiekt na JSON i ustawi odpowiedni content-type
 });
+
 //wyswietl jednego
+// http://localhost:4700/users/1
 app.get("/users/:userId", (req, res) => {
   const user = users.filter((u) => u.id == req.params.userId);
 
   if (user.length == 0) {
     res.status(404).send("User not found");
   }
-
-  // zwracając wartość za pomocą res.json() express sam przetworzy obiekt na JSON i ustawi odpowiedni content-type
   res.json(user[0]);
 });
+
 //usun uzytkownika z id
 app.delete("/users/:userId", (req, res) => {
   const userExists = users.find((u) => u.id == req.params.userId);

@@ -1,0 +1,36 @@
+{{! this is comment, it starts with exclamation }}
+<html>
+    <head>
+        <title>my page with mustache engine</title>
+    </head>
+
+    <body>
+        <h1>{{ name }}</h1>
+        <h1>Hello {{ name }} !</h1>
+        <p>{{ paragraphText }}</p>
+        <p>this is hardcoded text in paragraph</p>
+        <p style='color: green; font-weight: bold'>this is hardcoded text {{ paragraphText }} this is also hardcoded text</p>
+
+        {{ #showHidden }}
+            <div style="color: red">my hidden text</div>
+        {{ /showHidden }}
+        {{ ^showHidden }}
+            <div style="color: green">my normal text</div>
+        {{ /showHidden }}
+
+        <div class="container">
+            <div class="box">
+                <span id="my_span">this is text in span</span>
+            </div>
+        </div>
+            
+        <img src="https://asia.olympus-imaging.com/content/000107507.jpg" alt="tukan" />                
+
+        <ul>
+            {{ #collection }}
+                <li>{{ . }}</li>
+            {{ /collection }}
+        </ul>
+
+    </body>
+</html>
