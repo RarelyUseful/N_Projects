@@ -73,7 +73,6 @@ init()
       if (post) {
         res.send(post);
       }
-      console.log("Couldn't find post with this ID");
       res.statusCode = status.NOT_FOUND;
       res.send();
     });
@@ -105,25 +104,22 @@ init()
     });
     app.patch("/posts/:id", async (req, res, next) => {
       const { id } = req.params;
-      const modifiedTask = req.body;
+      const modifiedPost = req.body;
 
-      if (modifiedTask == null) {
+      if (modifiedPost == null) {
         res.statusCode = status.BAD_REQUEST;
       } else {
-        const result = await updatePost(id, modifiedTask.isAvailable);
-        /** //Sadly, can't update like this:
         for (const [key, value] of Object.entries(modifiedPost)) {
-          if (value != originalPost[key]) {
-            const result = await updatePost(dbid, key, value); */
+          const result = await updatePost(id, key, value);
+          console.log(result);
 
-        console.log(result);
-
-        if (result.modifiedCount === 1) {
-          res.statusCode = status.NO_CONTENT;
-        } else if (result.matchedCount === 1) {
-          res.statusCode = status.CONFLICT;
-        } else {
-          res.statusCode = status.NOT_FOUND;
+          if (result.modifiedCount === 1) {
+            res.statusCode = status.NO_CONTENT;
+          } else if (result.matchedCount === 1) {
+            res.statusCode = status.CONFLICT;
+          } else {
+            res.statusCode = status.NOT_FOUND;
+          }
         }
       }
 

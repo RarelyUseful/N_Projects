@@ -34,8 +34,8 @@ const addPost = (newPost) => {
 };
 
 // looks like this can only update hard-coded keys, can't do (...), { $set { thiskey: thisvalue } });
-const updatePost = (sid, newVal) => {
-  return postsCollection.updateOne({ _id: new ObjectId(sid) }, { $set: { isAvailable: newVal } });
+const updatePost = (sid, key, value) => {
+  return postsCollection.updateOne({ _id: new ObjectId(sid) }, { $set: { [key]: value } });
 };
 
 const replacePost = (sid, value) => {
