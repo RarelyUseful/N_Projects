@@ -33,14 +33,14 @@ const addPost = (newPost) => {
   return postsCollection.insertOne(newPost);
 };
 
-const updatePost = (thisid, value) => {
-  // looks like this can only update hard-coded keys, can't do (...), { $set { thiskey: thisvalue } });
-  return postsCollection.updateOne({ _id: thisid }, { $set: { isAvailable: value } }, { upsert: false });
+// looks like this can only update hard-coded keys, can't do (...), { $set { thiskey: thisvalue } });
+const updatePost = (sid, newVal) => {
+  return postsCollection.updateOne({ _id: new ObjectId(sid) }, { $set: { isAvailable: newVal } });
 };
 
-const replacePost = (thisid, value) => {
+const replacePost = (sid, value) => {
   // not sure how to use this either, looks like i can't just shove full object.
-  return postsCollection.replaceOne({ _id: new ObjectId(thisid) }, { value }, { upsert: false });
+  return postsCollection.replaceOne({ _id: new ObjectId(sid) }, { value }, { upsert: false });
 };
 
 module.exports = {

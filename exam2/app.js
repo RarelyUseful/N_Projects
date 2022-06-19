@@ -55,8 +55,10 @@ function isVerifiedToken(token) {
 const authMiddleware = (req, res, next) => {
   const token = req.get("authorization");
   if (isVerifiedToken(token)) {
+    console.log("Token is valid");
     next();
   } else {
+    console.log("Token is invalid");
     res.status(401);
     res.send("bad token");
   }
@@ -71,7 +73,7 @@ init()
       if (post) {
         res.send(post);
       }
-
+      console.log("Couldn't find post with this ID");
       res.statusCode = status.NOT_FOUND;
       res.send();
     });
@@ -91,28 +93,53 @@ init()
       if (!!result.insertedId) {
         res.statusCode = status.CREATED;
       } else {
+        console.log("Error, problem with database. Try again.");
         res.statusCode = status.INTERNAL_SERVER_ERROR;
       }
 
       res.send();
     });
 
-    app.patch("/posts/:id", async (req, res) => {
-      app.use(authMiddleware);
+    app.patch("/posts/:id", async (req, res, next) => {
+      authMiddleware(req, res, next);
+    });
+    app.patch("/posts/:id", async (req, res, next) => {
+      const { id } = req.params;
+      const modifiedTask = req.body;
 
+      if (modifiedTask == null) {
+        res.statusCode = status.BAD_REQUEST;
+      } else {
+        const result = await updatePost(id, modifiedTask.isAvailable);
+        /** //Sadly, can't update like this:
+        for (const [key, value] of Object.entries(modifiedPost)) {
+          if (value != originalPost[key]) {
+            const result = await updatePost(dbid, key, value); */
+
+        console.log(result);
+
+        if (result.modifiedCount === 1) {
+          res.statusCode = status.NO_CONTENT;
+        } else if (result.matchedCount === 1) {
+          res.statusCode = status.CONFLICT;
+        } else {
+          res.statusCode = status.NOT_FOUND;
+        }
+      }
+
+      res.send();
+    });
+    app.put("/posts/:id", async (req, res, next) => {
+      authMiddleware(req, res, next);
+    });
+    app.put("/posts/:id", async (req, res, next) => {
       const { dbid } = req.params;
       const modifiedPost = req.body;
 
       if (modifiedPost == null) {
         res.statusCode = status.BAD_REQUEST;
       } else {
-        /** //Sadly, can't update like this:
-        for (const [key, value] of Object.entries(modifiedPost)) {
-          if (value != originalPost[key]) {
-            const result = await updatePost(dbid, key, value); */
-        // doesn't work either:
-        // const result = await replacePost(dbid, modifiedPost);
-        const result = await updatePost(dbid, modifiedPost.isAvailable);
+        const result = await replacePost(dbid, modifiedPost);
         console.log(result);
 
         if (result.modifiedCount === 1) {
@@ -127,9 +154,11 @@ init()
       res.send();
     });
 
-    app.delete("/posts/:id", async (req, res) => {
-      app.use(authMiddleware);
+    app.delete("/posts/:id", async (req, res, next) => {
+      authMiddleware(req, res, next);
+    });
 
+    app.delete("/posts/:id", async (req, res) => {
       const { id } = req.params;
       const result = await deletePost(id);
       console.log(result);
