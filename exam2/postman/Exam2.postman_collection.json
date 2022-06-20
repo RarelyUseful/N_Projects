@@ -1,0 +1,685 @@
+{
+	"info": {
+		"_postman_id": "127fbf5a-7e0e-439f-a085-666bcdc9a1b1",
+		"name": "Exam2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19887995"
+	},
+	"item": [
+		{
+			"name": "02: heartbeat",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Dupa3",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}:{{port}}/heartbeat",
+					"host": [
+						"{{baseURL}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"heartbeat"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "03: Add post#1",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Dupa3",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Oddam cośtam\",\r\n    \"description\": \"za darmo to uczciwa cena\",\r\n    \"city\": \"Białystok\",\r\n    \"category\": \"Oddam\",\r\n    \"tags\": [\"Oddam\", \"Coś\", \"Za darmo\"],\r\n    \"price\": 0,\r\n    \"isAvailable\": false,\r\n    \"postedDate\": \"2022-06-01\",\r\n    \"author\": \"Chuck Norris\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}:{{port}}/posts",
+					"host": [
+						"{{baseURL}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "03: Add post#2",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Dupa3",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Sprzedam cośtam\",\r\n    \"description\": \"Proszę pieniążki.\",\r\n    \"city\": \"Warszawa\",\r\n    \"category\": \"Sprzedam\",\r\n    \"tags\": [\"Pestiż\", \"Lifestyle\"],\r\n    \"price\": 199,\r\n    \"author\": \"Chuck Norris\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}:{{port}}/posts",
+					"host": [
+						"{{baseURL}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "03: Add post Required Only",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Dupa3",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Kupię kilo czereśni\",\r\n    \"description\": \"Stać mnie.\",\r\n    \"city\": \"Szczecin\",\r\n    \"category\": \"Kupię\",\r\n    \"tags\": [\"Food\", \"Cash\"],\r\n    \"price\": 99.9\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}:{{port}}/posts",
+					"host": [
+						"{{baseURL}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "03: Add post missing parts",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Dupa3",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Dej ajfona\",\r\n    \"description\": \"Mam horom curke.\",\r\n    \"tags\": [\"Dej\"],\r\n    \"price\": 0\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}:{{port}}/posts",
+					"host": [
+						"{{baseURL}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "03: Add post to delete later",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Dupa3",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Sprzedam nic\",\r\n    \"description\": \"Zapłać więcej, dostań dwa razy nic!\",\r\n    \"city\": \"Łomża\",\r\n    \"category\": \"Sprzedam\",\r\n    \"tags\": [\"Cash\", \"Good deal\"],\r\n    \"price\": 200,\r\n    \"postedDate\": \"2022-03-04\",\r\n    \"author\": \"Chuck Norris\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}:{{port}}/posts",
+					"host": [
+						"{{baseURL}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "04a: Get all posts",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Dupa3",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}:{{port}}/posts",
+					"host": [
+						"{{baseURL}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "04b: Get post id: ...",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Dupa3",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}:{{port}}/posts/62b0b826750d1ac39fab8b26",
+					"host": [
+						"{{baseURL}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"posts",
+						"62b0b826750d1ac39fab8b26"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "04b: Get post id: <wrong id>",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Dupa3",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}:{{port}}/posts/62b0b1d3a4330dfd15721111",
+					"host": [
+						"{{baseURL}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"posts",
+						"62b0b1d3a4330dfd15721111"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "05: Delete post id: ... OK",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Dupa3",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}:{{port}}/posts/62b0b4c7a4330dfd15721748",
+					"host": [
+						"{{baseURL}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"posts",
+						"62b0b4c7a4330dfd15721748"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "06: Update post id: ...  OK",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Dupa3",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Updated Title\",\r\n    \"isAvailable\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}:{{port}}/posts/62b0b4c7a4330dfd15721748",
+					"host": [
+						"{{baseURL}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"posts",
+						"62b0b4c7a4330dfd15721748"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "07: Search Params",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Dupa3",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}:{{port}}/search?description=Test",
+					"host": [
+						"{{baseURL}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"search"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "cośtam",
+							"disabled": true
+						},
+						{
+							"key": "description",
+							"value": "Test"
+						},
+						{
+							"key": "city",
+							"value": "Białystok",
+							"disabled": true
+						},
+						{
+							"key": "price_min",
+							"value": "99",
+							"disabled": true
+						},
+						{
+							"key": "price_max",
+							"value": "100",
+							"disabled": true
+						},
+						{
+							"key": "posted_since",
+							"value": "2022-03-01",
+							"disabled": true
+						},
+						{
+							"key": "posted_before",
+							"value": "2022-06-19",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "07: Search Tags",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Dupa3",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}:{{port}}/searchtags?tags=Food, Desperacja",
+					"host": [
+						"{{baseURL}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"searchtags"
+					],
+					"query": [
+						{
+							"key": "tags",
+							"value": "Food",
+							"disabled": true
+						},
+						{
+							"key": "tags",
+							"value": "Food, Desperacja"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "09a: Delete post id: ... No Token",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Dupa3",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}:{{port}}/posts/62b0b4c3a4330dfd15721747",
+					"host": [
+						"{{baseURL}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"posts",
+						"62b0b4c3a4330dfd15721747"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "09b: Update post id: ...  No Token",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Dupa3",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"new title\",\r\n    \"isAvailable\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}:{{port}}/posts/62b0b826750d1ac39fab8b26",
+					"host": [
+						"{{baseURL}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"posts",
+						"62b0b826750d1ac39fab8b26"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "10a: Delete post id: ... wrong User",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Dupa3",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}:{{port}}/posts/62b0b826750d1ac39fab8b26",
+					"host": [
+						"{{baseURL}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"posts",
+						"62b0b826750d1ac39fab8b26"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "10b: Update post id: ... Wrong User",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Dupa3",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"new title\",\r\n    \"isAvailable\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}:{{port}}/posts/62b0b826750d1ac39fab8b26",
+					"host": [
+						"{{baseURL}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"posts",
+						"62b0b826750d1ac39fab8b26"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "12: bad url",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Dupa3",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}:{{port}}/memes",
+					"host": [
+						"{{baseURL}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"memes"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
