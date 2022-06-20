@@ -1,5 +1,6 @@
 const MongoClient = require("mongodb").MongoClient;
 const { ObjectId } = require("mongodb");
+const { resourceLimits } = require("worker_threads");
 
 const url = process.env.MONGODB_CONNECTION;
 
@@ -42,6 +43,27 @@ const replacePost = (sid, value) => {
   // not sure how to use this either, looks like i can't just shove full object.
   return postsCollection.replaceOne({ _id: new ObjectId(sid) }, { value }, { upsert: false });
 };
+const searchPosts = (req) => {
+  const title = req.query.title || "";
+  const description = req.query.description || "";
+  const price_min = Number(req.query.price_min) || 0;
+  const price_max = Number(req.query.price_max) || Infinity;
+  const posted_since = new Date(req.query.posted_since) || new Date("1950-01-01");
+  const posted_before = new Date(req.query.posted_before) || new Date("2077-01-01");
+  const tags = req.query.tag || ",";
+  const tag = tags.trim().split(",");
+  console.log(tag);
+  return postsCollection
+    .find({
+      title: { $regex: title },
+      description: { $regex: description },
+      price: { $gte: price_min, $lte: price_max },
+      //postedDate: { $gte: posted_since, $lte: posted_before },
+      // tags: { $all: tag },
+      //   tags: tag,
+    })
+    .toArray();
+};
 
 module.exports = {
   init,
@@ -51,4 +73,5 @@ module.exports = {
   addPost,
   updatePost,
   replacePost,
+  searchPosts,
 };

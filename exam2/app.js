@@ -28,7 +28,7 @@ x 6. [1 punkt] Aplikacja umożliwia modyfikowanie wybranego ogłoszenia
 x 8. [4-8 punktów] Aplikacja zapisuje ogłoszenia w bazie danych [8 punktów] lub plikach [4 punkty]
 x 9. [2 punkty] Usuwanie i modyfikowanie ogłoszeń jest zabezpieczone hasłem (np. middleware weryfikujące hasło),
     przy braku dostępu zwracany jest stosowny komunikat i kod odpowiedzi HTTP. Nie jest wymagane zabezpieczenie na poziomie *produkcyjnym*, raczej podstawowe rozwiązanie.
-10. [4 punkty] Aplikacja ma 3 zdefiniowanych na stałe użytkowników, każdy z nich może usuwać i modyfikować tylko
+x 10. [4 punkty] Aplikacja ma 3 zdefiniowanych na stałe użytkowników, każdy z nich może usuwać i modyfikować tylko
     te ogłoszenia które sam dodał, przy braku dostępu zwracany jest stosowny komunikat i kod odpowiedzi HTTP
 x 11. [3 punkty] Aplikacja po uruchomieniu z parametrem (np `node app.js debug`) zapisuje w pliku czas odebrania każdego
     żądania, metodę HTTP oraz adres na który przyszło żądanie
@@ -47,7 +47,18 @@ const fs = require("fs");
 const argv = require("yargs").argv;
 
 const port = process.env.PORT;
-const { init, getPosts, getPost, deletePost, addPost, updatePost, replacePost } = require("./dbsetup");
+const {
+  init,
+  getPosts,
+  getPost,
+  deletePost,
+  addPost,
+  updatePost,
+  replacePost,
+  searchPosts,
+} = require("./dbsetup");
+const { TaskModel } = require("./schema");
+const { userCheckMiddleware, authMiddleware } = require("./middleware");
 const filePath404 = path.join(__dirname, "404.jpg");
 
 app.disable("x-powered-by");
@@ -73,39 +84,6 @@ if (debugging) {
   app.use(requestTime);
 }
 // end of task 11.
-// Task 10. I know it's kind of stupid and this is probably something configurable in database.
-const users = ["Admin", "Chuck Norris", "Queen of England"];
-let currentUser = users[0];
-const userCheckMiddleware = (req, res, next) => {
-  const url = req.url;
-  const [empty, id] = url.split("/posts/");
-  console.log("catched url " + url + " so " + e + " then " + id);
-  const post = getPost(id);
-  postAuthor = post.Author;
-  if (postAuthor == currentUser) {
-    console.log("User authentication: OK");
-    next();
-  } else {
-    console.log("401, Unauthorized.");
-    res.status(401);
-    res.send("user not permitted");
-  }
-};
-
-function isVerifiedToken(token) {
-  return token === process.env.TOKEN;
-}
-const authMiddleware = (req, res, next) => {
-  const token = req.get("authorization");
-  if (isVerifiedToken(token)) {
-    console.log("Token: valid");
-    next();
-  } else {
-    console.log("401, Unauthorized.");
-    res.status(401);
-    res.send("bad token");
-  }
-};
 
 init()
   .then(() => {
@@ -115,9 +93,10 @@ init()
 
       if (post) {
         res.send(post);
+      } else {
+        res.sendFile(filePath404);
+        res.statusCode = status.NOT_FOUND;
       }
-      res.statusCode = status.NOT_FOUND;
-      res.send();
     });
 
     app.get("/posts", async (req, res) => {
@@ -125,8 +104,13 @@ init()
       res.send(posts);
     });
 
+    app.get("/search", async (req, res) => {
+      const search = await searchPosts(req);
+      res.send(search);
+    });
+
     app.post("/posts", async (req, res) => {
-      const newPost = req.body;
+      const newPost = new TaskModel(req.body);
 
       // dodaj weryfikację, gdy nie to zwróć kod 400 bez dodawania do bazy
 
@@ -164,6 +148,7 @@ init()
           } else if (result.matchedCount === 1) {
             res.statusCode = status.CONFLICT;
           } else {
+            res.sendFile(filePath404);
             res.statusCode = status.NOT_FOUND;
           }
         }
@@ -185,6 +170,7 @@ init()
       if (result.deletedCount == 1) {
         res.statusCode = status.NO_CONTENT;
       } else {
+        res.sendFile(filePath404);
         res.statusCode = status.NOT_FOUND;
       }
 
@@ -197,6 +183,7 @@ init()
     });
     app.all("/*", (req, res) => {
       res.sendFile(filePath404);
+      res.statusCode = status.NOT_FOUND;
     });
 
     app.listen(port, () => console.log("server started"));
