@@ -1,20 +1,17 @@
 const { getPost } = require("./dbsetup");
 
-// Task 10. I know it's kind of stupid and this is probably something configurable in database permissions.
-const users = ["Admin", "Chuck Norris", "Queen of England"];
+// Task 10. I'm not sure what to do, this is probably something configurable in database permissions anyway.
+const users = ["Admin", "Chuck Norris", "Queen of England"]; //maybe hide them in .env file?
 let currentUser = users[0];
 
-const userCheckMiddleware = (req, res, next) => {
+const userCheckMiddleware = async (req, res, next) => {
   const url = req.url;
   const [empty, id] = url.split("/posts/");
-  const post = getPost(id);
-  console.log(post);
-  postAuthor = post.Author;
-  if (postAuthor == currentUser) {
+  let post = await getPost(id);
+  postAuthor = post.author;
+  console.log(postAuthor);
+  if (postAuthor === currentUser) {
     console.log("User authentication: OK");
-    next();
-  } else if (!!!post._id) {
-    console.log("Post doesn't exist, skipping user authentication.");
     next();
   } else {
     console.log("401, Unauthorized.");
@@ -41,4 +38,5 @@ const authMiddleware = (req, res, next) => {
 module.exports = {
   userCheckMiddleware,
   authMiddleware,
+  currentUser,
 };

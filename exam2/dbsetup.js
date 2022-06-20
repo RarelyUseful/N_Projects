@@ -46,19 +46,28 @@ const replacePost = (sid, value) => {
 const searchPosts = (req) => {
   const title = req.query.title || "";
   const description = req.query.description || "";
+  const city = req.query.city || "";
   const price_min = Number(req.query.price_min) || 0;
   const price_max = Number(req.query.price_max) || Infinity;
-  const posted_since = new Date(req.query.posted_since) || new Date("1950-01-01");
-  const posted_before = new Date(req.query.posted_before) || new Date("2077-01-01");
+  let posted_since = new Date("2020-01-01");
+  let posted_before = new Date("2023-01-01");
   //   const tags = req.query.tags || ",";
   //   const tag = tags.trim().split(",");
   //   console.log(tag);
+  if (!!req.query.posted_since) {
+    posted_since = new Date(req.query.posted_since);
+  }
+  if (!!req.query.posted_before) {
+    posted_before = new Date(req.query.posted_before);
+  }
+
   return postsCollection
     .find({
       title: { $regex: title },
       description: { $regex: description },
+      city: { $regex: city },
       price: { $gte: price_min, $lte: price_max },
-      //postedDate: { $gte: posted_since, $lte: posted_before },
+      postedDate: { $gte: posted_since, $lte: posted_before },
       // tags: { $all: tag },
       //   tags: tag,
     })

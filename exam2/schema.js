@@ -1,14 +1,15 @@
 const mongoose = require("mongoose");
+const { currentUser } = require("./middleware");
 
 // definicja schematu kolecji bazodanowej
 const PostingFrame = new mongoose.Schema(
   {
-    title: String,
-    description: String,
-    author: String, // ? maybe i can force it to be one of pre-Defined Users ?
-    category: String,
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    city: { type: String, required: true },
+    category: { type: String, required: true },
     tags: Array, // syntax ?
-    price: Number,
+    price: { type: Number, required: true },
     isAvailable: {
       type: Boolean,
       default: true,
@@ -17,23 +18,15 @@ const PostingFrame = new mongoose.Schema(
       type: Date,
       default: new Date(), // wartość domyślna
     },
-    disabilities: String,
+    author: { type: String, default: currentUser }, // maybe i can force it to be one of pre-Defined Users ?
   },
   { timestamps: true } // automatyczne dodawanie włąściwości z czasem utworzenia i modyfikacji dokumentu w bazie
 );
 
 // tworzenie modelu danych dla konkretnej kolekcji na podstawie uprzednio stworzonego schematu
-const TaskModel = mongoose.model("posts", PostingFrame); // pierwszy parametr to nazwa kolekcji w bazie danych
+// const PostModel = mongoose.model("posts", PostingFrame); // pierwszy parametr to nazwa kolekcji w bazie danych
 
-const newTask = new TaskModel({
-  title: "Zmarła Amelia Goldman",
-  description: "Sprzedam Opla",
-  author: "Andrzej",
-  category: "Ogłoszenia",
-  tags: ["Stypa", "Nekrologi", "Ogłoszenia"],
-  price: 0,
-  disabilities: "za ile?",
-});
 module.exports = {
-  TaskModel,
+  //PostModel,
+  PostingFrame,
 };

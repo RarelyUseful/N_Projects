@@ -23,7 +23,7 @@ x 3. [1 punkt] Aplikacja umożliwia dodawanie ogłoszenia
 x 4. [2 punkty] Aplikacja umożliwia zwracanie wszystkich ogłoszeń oraz pojedynczego ogłoszenia
 x 5. [1 punkt] Aplikacja umożliwia usuwanie wybranego ogłoszenia
 x 6. [1 punkt] Aplikacja umożliwia modyfikowanie wybranego ogłoszenia
-7. [1 punkt za każde kryterium wyszukiwania/maksymalnie 5 punktów]
+x 7. [1 punkt za każde kryterium wyszukiwania/maksymalnie 5 punktów]
     Aplikacja pozwala na wyszukiwanie ogłoszeń według różnych kryteriów (tytuł, opis, zakres data, zakres ceny itp).
 x 8. [4-8 punktów] Aplikacja zapisuje ogłoszenia w bazie danych [8 punktów] lub plikach [4 punkty]
 x 9. [2 punkty] Usuwanie i modyfikowanie ogłoszeń jest zabezpieczone hasłem (np. middleware weryfikujące hasło),
@@ -34,7 +34,7 @@ x 11. [3 punkty] Aplikacja po uruchomieniu z parametrem (np `node app.js debug`)
     żądania, metodę HTTP oraz adres na który przyszło żądanie
 x 12. [2 punkty] Aplikacja po odebraniu żądania do adresu który nie istnieje powinna zwracać statyczny obrazek
     zamiast domyślnej strony błędu 404
-x?13. [2 punkty] W przypadku wystąpienia błędów aplikacji, szczegóły błędu zapisywane są w console.log
+x 13. [2 punkty] W przypadku wystąpienia błędów aplikacji, szczegóły błędu zapisywane są w console.log
     a użytkownik dostaje stosowny komunikat i kod odpowiedzi HTTP */
 // 14. Add sample.env
 
@@ -45,6 +45,7 @@ const status = require("http-status");
 const path = require("path");
 const fs = require("fs");
 const argv = require("yargs").argv;
+const mongoose = require("mongoose");
 
 const port = process.env.PORT;
 const {
@@ -58,7 +59,7 @@ const {
   searchPosts,
   searchTags,
 } = require("./dbsetup");
-const { TaskModel } = require("./schema");
+const { PostingFrame } = require("./schema");
 const { userCheckMiddleware, authMiddleware } = require("./middleware");
 const filePath404 = path.join(__dirname, "404.jpg");
 
@@ -115,20 +116,26 @@ init()
     });
 
     app.post("/posts", async (req, res) => {
-      const newPost = new TaskModel(req.body);
+      const PostModel = mongoose.model("Post", PostingFrame);
+      const newPost = new PostModel(req.body);
+      const error = newPost.validateSync();
+      if (!error) {
+        const result = await addPost(newPost);
+        console.log(result);
+        if (!!result.insertedId) {
+          res.statusCode = status.CREATED;
+        } else {
+          console.log("Error, problem with database. Try again.");
+          res.statusCode = status.INTERNAL_SERVER_ERROR;
+        }
 
-      // dodaj weryfikację, gdy nie to zwróć kod 400 bez dodawania do bazy
-
-      const result = await addPost(newPost);
-      console.log(result);
-      if (!!result.insertedId) {
-        res.statusCode = status.CREATED;
+        res.send();
       } else {
-        console.log("Error, problem with database. Try again.");
-        res.statusCode = status.INTERNAL_SERVER_ERROR;
+        console.log("Components missing in post");
+        console.log(error.message);
+        res.statusCode = status.BAD_REQUEST;
+        res.send();
       }
-
-      res.send();
     });
 
     app.patch("/posts/:id", async (req, res, next) => {
