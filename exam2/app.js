@@ -56,6 +56,7 @@ const {
   updatePost,
   replacePost,
   searchPosts,
+  searchTags,
 } = require("./dbsetup");
 const { TaskModel } = require("./schema");
 const { userCheckMiddleware, authMiddleware } = require("./middleware");
@@ -107,6 +108,10 @@ init()
     app.get("/search", async (req, res) => {
       const search = await searchPosts(req);
       res.send(search);
+    });
+    app.get("/searchtags", async (req, res) => {
+      const searchtag = await searchTags(req);
+      res.send(searchtag);
     });
 
     app.post("/posts", async (req, res) => {

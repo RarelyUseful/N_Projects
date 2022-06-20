@@ -50,9 +50,9 @@ const searchPosts = (req) => {
   const price_max = Number(req.query.price_max) || Infinity;
   const posted_since = new Date(req.query.posted_since) || new Date("1950-01-01");
   const posted_before = new Date(req.query.posted_before) || new Date("2077-01-01");
-  const tags = req.query.tag || ",";
-  const tag = tags.trim().split(",");
-  console.log(tag);
+  //   const tags = req.query.tags || ",";
+  //   const tag = tags.trim().split(",");
+  //   console.log(tag);
   return postsCollection
     .find({
       title: { $regex: title },
@@ -65,6 +65,13 @@ const searchPosts = (req) => {
     .toArray();
 };
 
+//empty tag screws search results, so i moved it to separate url
+const searchTags = (req) => {
+  const tagsString = req.query.tags || "";
+  const tagsArr = tagsString.replace(/ /g, "").split(",");
+  return postsCollection.find({ tags: { $all: tagsArr } }).toArray();
+};
+
 module.exports = {
   init,
   getPosts,
@@ -74,4 +81,5 @@ module.exports = {
   updatePost,
   replacePost,
   searchPosts,
+  searchTags,
 };
